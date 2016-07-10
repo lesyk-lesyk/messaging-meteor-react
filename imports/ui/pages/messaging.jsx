@@ -11,6 +11,16 @@ class Messaging extends Component {
     super(props);
   }
 
+  handleSubmit(event) {
+    event.preventDefault();
+
+    const text = this.refs.textInput.value.trim();
+    if ( text.length > 0 ) {
+      Meteor.call('message.send', text);
+    }
+    this.refs.textInput.value = '';
+  }
+
   renderMessages() {
     return this.props.messages.map((message) => {
       const currentUserId = this.props.currentUser && this.props.currentUser._id
@@ -29,9 +39,21 @@ class Messaging extends Component {
     return (
       <div className="container">
         <h1>Messages</h1>
-        <ul>
-          {this.renderMessages()}
-        </ul>
+
+        <div id="messages-container">
+          <ul>
+            {this.renderMessages()}
+          </ul>
+        </div>
+
+        <form className="send-form" onSubmit={this.handleSubmit.bind(this)}>
+          <input 
+            type="text"
+            ref="textInput"
+            placeholder="Type message..."
+          />
+          <input type="submit" value="Send"/>
+        </form>
       </div>
     );
   }
@@ -46,7 +68,7 @@ export const MessagingContainer = createContainer(() => {
   Meteor.subscribe('messages');
   
   return {
-    messages: Messages.find({}).fetch(),
+    messages: Messages.find({}, { sort : { createdAt: 1 } }).fetch(),
     currentUser: Meteor.user(),
   };
 }, Messaging);
