@@ -5,8 +5,9 @@ export const Messages = new Mongo.Collection('messages');
 
 if (Meteor.isServer) {
   Meteor.publish('messages', function messagesPublication() {
+    var user = Meteor.users.findOne(this.userId);
     return Messages.find({
-      location: Meteor.users.findOne(this.userId).profile.location,
+      location: user ? user.profile.location : '',
     });
   });
 }
