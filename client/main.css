@@ -4,3 +4,9 @@
   font-style: italic;
   color: gray;
 }
+
+#messages-container {
+  height: 150px;
+  border: 1px solid gray;
+  overflow-y: scroll;
+}

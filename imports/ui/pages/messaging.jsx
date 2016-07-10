@@ -21,6 +21,11 @@ class Messaging extends Component {
     this.refs.textInput.value = '';
   }
 
+  componentDidUpdate() {
+    var container = document.getElementById("messages-container");
+    container.scrollTop = container.scrollHeight;
+  }
+
   renderMessages() {
     return this.props.messages.map((message) => {
       const currentUserId = this.props.currentUser && this.props.currentUser._id
