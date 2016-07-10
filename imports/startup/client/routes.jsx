@@ -6,7 +6,7 @@ import { Router, Route, IndexRoute, browserHistory } from 'react-router';
 
 import { App } from '../../ui/layouts/app.jsx';
 
-import { Messaging } from '../../ui/pages/messaging.jsx';
+import { MessagingContainer } from '../../ui/pages/messaging.jsx';
 import { UserSettings } from '../../ui/pages/user-settings.jsx';
 import { Welcome } from '../../ui/pages/welcome.jsx';
 import { CreateAccount } from '../../ui/pages/create-account.jsx';
@@ -25,7 +25,7 @@ Meteor.startup( () => {
   render( 
     <Router history={ browserHistory }>
       <Route path="/" component={ App } onEnter={ requireAuth }>
-        <IndexRoute component={ Messaging } />
+        <IndexRoute component={ MessagingContainer } />
         <Route path="/settings" component={ UserSettings } />
       </Route>
       <Route path="/welcome" component={ Welcome } />
