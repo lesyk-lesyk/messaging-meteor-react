@@ -6,7 +6,7 @@ export const Messages = new Mongo.Collection('messages');
 if (Meteor.isServer) {
   Meteor.publish('messages', function messagesPublication() {
     return Messages.find({
-      // add filter
+      location: Meteor.users.findOne(this.userId).profile.location,
     });
   });
 }
@@ -23,6 +23,7 @@ Meteor.methods({
       createdAt: new Date(),
       owner: this.userId,
       username: Meteor.users.findOne(this.userId).profile.firstname,
+      location: Meteor.users.findOne(this.userId).profile.location,
     });
   },
 

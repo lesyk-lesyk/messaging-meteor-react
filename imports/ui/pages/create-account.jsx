@@ -1,9 +1,10 @@
 import React from 'react';
-import { Register } from '../components/register.jsx';
+import { RegisterContainer } from '../components/register.jsx';
+import { Link } from 'react-router';
 
 export const CreateAccount = () => (
   <div>
-    <p>Create New Account</p>
-    <Register />
+    <p>Create New Account or <Link to="welcome">Login</Link></p>
+    <RegisterContainer />
   </div>
 );
