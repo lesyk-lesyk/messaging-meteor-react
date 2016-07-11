@@ -19,7 +19,7 @@ export class Navigation extends Component {
         <p>Hello, { userName() } </p>
         <ul>
           <li><IndexLink to="/" activeClassName="active">Messaging</IndexLink></li>
-          <li><Link to="/settings" activeClassName="active">User Settings</Link></li>
+          <li><Link to="/settings" activeClassName="active">Settings</Link></li>
           <li><Link to="" onClick={ handleLogout } >LogOut</Link></li>
         </ul>
       </div>

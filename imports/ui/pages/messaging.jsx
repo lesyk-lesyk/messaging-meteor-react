@@ -23,7 +23,9 @@ class Messaging extends Component {
 
   componentDidUpdate() {
     var container = document.getElementById("messages-container");
-    container.scrollTop = container.scrollHeight;
+    if (container) {
+      container.scrollTop = container.scrollHeight;
+    }    
   }
 
   renderMessages() {
@@ -40,10 +42,15 @@ class Messaging extends Component {
     });
   }
 
+  getLocation() {
+    return this.props.currentUser.profile.location;
+  }
+
   render() {
-    return (
-      <div className="container">
-        <h1>Messages</h1>
+    if (this.props.dataIsReady) {
+      return (
+        <div className="container">
+        <h1>Messages: <em>{this.getLocation()}</em></h1>
 
         <div id="messages-container">
           <ul>
@@ -53,14 +60,17 @@ class Messaging extends Component {
 
         <form className="send-form" onSubmit={this.handleSubmit.bind(this)}>
           <input 
-            type="text"
-            ref="textInput"
-            placeholder="Type message..."
+          type="text"
+          ref="textInput"
+          placeholder="Type message..."
           />
           <input type="submit" value="Send"/>
         </form>
-      </div>
-    );
+        </div>
+      );
+    } else {
+      return (<div>Loading data...</div>);
+    }
   }
 }
 
@@ -70,10 +80,12 @@ Messaging.propTypes = {
 };
 
 export const MessagingContainer = createContainer(() => {
-  Meteor.subscribe('messages');
+  const dataHandle = Meteor.subscribe('messages');
+  const dataIsReady = dataHandle.ready();
   
   return {
     messages: Messages.find({}, { sort : { createdAt: 1 } }).fetch(),
     currentUser: Meteor.user(),
+    dataIsReady,
   };
 }, Messaging);
