@@ -2,14 +2,17 @@ import React, { Component, PropTypes } from 'react';
 import { Meteor } from 'meteor/meteor';
 import { browserHistory } from 'react-router';
 import { Accounts } from 'meteor/accounts-base';
+import { Link } from 'react-router';
 
+import { getInputValue } from '../../modules/get-input-value';
+import { Row, Col, FormGroup, ControlLabel, FormControl, Button } from 'react-bootstrap';
 
 export class Login extends Component {
   handleSubmit(event) {
     event.preventDefault();
-
-    var email = this.refs.email.value.trim();
-    var password = this.refs.password.value.trim();
+    
+    var email = getInputValue(this.refs.email).trim();
+    var password = getInputValue(this.refs.password).trim();
     
     Meteor.loginWithPassword(email, password, function(err) {
       if(err) {
@@ -25,13 +28,31 @@ export class Login extends Component {
 
   render() {
     return (
-      <div>
-        <form onSubmit={this.handleSubmit.bind(this)}>
-          <input type="text" ref="email" placeholder="Email..."/>
-          <input type="password" ref="password" placeholder="Password..."/>
-          <input type="submit" value="Login"/>
-        </form>
-      </div>
+        <div>
+          <form onSubmit={this.handleSubmit.bind(this)}>
+             <FormGroup>
+              <ControlLabel>Email Address</ControlLabel>
+              <FormControl
+                type="email"
+                ref="email"
+                name="email"
+                placeholder="Email Address"
+              />
+            </FormGroup>
+            <FormGroup>
+              <ControlLabel>
+                <span className="pull-left">Password</span>
+              </ControlLabel>
+              <FormControl
+                type="password"
+                ref="password"
+                name="password"
+                placeholder="Password"
+              />
+            </FormGroup>
+            <Button type="submit" bsStyle="success">Login</Button>
+          </form>
+        </div>
     );
   }
 }

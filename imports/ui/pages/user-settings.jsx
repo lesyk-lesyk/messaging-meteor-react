@@ -6,17 +6,20 @@ import { Accounts } from 'meteor/accounts-base';
 import { createContainer } from 'meteor/react-meteor-data';
 import { Locations } from '../../api/locations.js';
 
+import { getInputValue } from '../../modules/get-input-value';
+import { Row, Col, Jumbotron, FormGroup, ControlLabel, FormControl, Button } from 'react-bootstrap';
+
 class UserSettings extends Component {
   handleSubmit(event) {
     event.preventDefault();
 
-    var email = this.refs.email.value.trim();
-    var firstname = this.refs.firstname.value.trim();
-    var lastname = this.refs.lastname.value.trim();
-    var location = this.refs.location.value.trim();
-    var oldPassword = this.refs.oldPassword.value.trim();
-    var newPassword = this.refs.newPassword.value.trim();
-    var newPasswordAgain = this.refs.newPasswordAgain.value.trim();
+    var email = getInputValue(this.refs.email).trim();
+    var firstname = getInputValue(this.refs.firstname).trim();
+    var lastname = getInputValue(this.refs.lastname).trim();
+    var location = getInputValue(this.refs.location).trim();
+    var oldPassword = getInputValue(this.refs.oldPassword).trim();
+    var newPassword = getInputValue(this.refs.newPassword).trim();
+    var newPasswordAgain = getInputValue(this.refs.newPasswordAgain).trim();
 
     Meteor.users.update( { _id: Meteor.userId() }, { $set: {
       'emails.0.address': email,
@@ -35,21 +38,19 @@ class UserSettings extends Component {
 
     if (oldPassword.length>0 || newPassword.length>0 || newPasswordAgain.length>0) { 
       if (oldPassword !== newPassword && newPassword === newPasswordAgain && newPassword.length !==0) {
-        console.log('changePassword');
-      Accounts.changePassword(oldPassword, newPassword, function(err) {
-        if(err) {
-          if (err.reason) {
-            alert(err.reason);
+        Accounts.changePassword(oldPassword, newPassword, function(err) {
+          if(err) {
+            if (err.reason) {
+              alert(err.reason);
+            }
+          } else {
+            alert('Password updated!')
           }
-        } else {
-          alert('Password updated!')
-        }
-      });
+        });
       } else {
         alert('Passwords are the same or didn`t match!');
       }
     } 
-
   }
 
   render() {
@@ -57,22 +58,93 @@ class UserSettings extends Component {
       var user = this.props.currentUser;
       return (
         <div>
-          <h2>Edit profile:</h2>
-          <form onSubmit={this.handleSubmit.bind(this)}>
-          <input type="text" ref="firstname" placeholder="First name..." defaultValue = {user.profile.firstname} required="required"/><br/>
-          <input type="text" ref="lastname" placeholder="Last name..." defaultValue = {user.profile.lastname} required="required"/><br/>    
-          <input type="text" ref="email" placeholder="Email..." defaultValue = {user.emails[0].address} required="required"/><br/> 
-          <input type="password" ref="oldPassword" placeholder="Old password..." /><br/>
-          <input type="password" ref="newPassword" placeholder="New password..." /><br/>
-          <input type="password" ref="newPasswordAgain" placeholder="New password again..." /><br/><br/>
-          <select name="location" ref="location" defaultValue={user.profile.location}>
-          { this.props.locations.map(function(location) {
-            return <option key={location._id} value={location.name}>{location.name}</option>;
-          })}
-          </select><br/><br/>
+        <Jumbotron className="text-center">
+          <Row>
+            <Col xs={ 12 } sm={ 4 } smOffset={4}>
+              <h2 className="text-info">Edit profile</h2>
+              <form onSubmit={this.handleSubmit.bind(this)}>
 
-          <input type="submit" value="Update"/>
-          </form>
+               <FormGroup>
+                <FormControl
+                  type="text"
+                  ref="firstname"
+                  name="firstname"
+                  placeholder="First name"
+                  required="true"
+                  defaultValue = {user.profile.firstname}
+                />
+              </FormGroup>
+
+               <FormGroup>
+                <FormControl
+                  type="text"
+                  ref="lastname"
+                  name="lastname"
+                  placeholder="Last name"
+                  required="true"
+                  defaultValue = {user.profile.lastname}
+                />
+              </FormGroup>
+
+              
+               <FormGroup>
+                <FormControl
+                  type="email"
+                  ref="email"
+                  name="email"
+                  placeholder="Email"
+                  required="true"
+                  defaultValue = {user.emails[0].address}
+                />
+              </FormGroup>
+
+               <FormGroup>
+                <FormControl
+                  type="password"
+                  ref="oldPassword"
+                  name="oldPassword"
+                  placeholder="Old password"
+                />
+              </FormGroup>
+
+               <FormGroup>
+                <FormControl
+                  type="password"
+                  ref="newPassword"
+                  name="newPassword"
+                  placeholder="New password"
+                />
+              </FormGroup>
+
+               <FormGroup>
+                <FormControl
+                  type="password"
+                  ref="newPasswordAgain"
+                  name="newPasswordAgain"
+                  placeholder="New password again"
+                />
+              </FormGroup>
+
+              <FormGroup controlId="formControlsSelect">
+                <ControlLabel>Select your location. </ControlLabel>
+                <FormControl 
+                  componentClass="select" 
+                  ref="location" 
+                  placeholder="select" 
+                  required="true"
+                  defaultValue={user.profile.location}>
+                  { this.props.locations.map(function(location) {
+                    return <option key={location._id} value={location.name}>{location.name}</option>;
+                  })}
+                </FormControl>
+              </FormGroup>
+                        
+              <Button type="submit" bsStyle="success">Update</Button>
+
+              </form>
+            </Col>
+          </Row>
+        </Jumbotron>
         </div>
       );
     } else {
