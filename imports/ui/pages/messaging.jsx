@@ -1,5 +1,5 @@
 import React, { Component, PropTypes }  from 'react';
-import ReactDom from 'react-dom';
+import ReactDOM from 'react-dom';
 import { Meteor } from 'meteor/meteor';
 import { createContainer } from 'meteor/react-meteor-data';
 
@@ -21,7 +21,7 @@ class Messaging extends Component {
     if ( text.length > 0 ) {
       Meteor.call('message.send', text);
     }
-    this.refs.textInput.value = '';
+    ReactDOM.findDOMNode(this.refs.textInput).value ='';
   }
 
   componentDidUpdate() {
