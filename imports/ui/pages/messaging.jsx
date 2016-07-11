@@ -47,7 +47,6 @@ class Messaging extends Component {
   }
 
   render() {
-    console.log('render');
     if (this.props.dataIsReady) {
       return (
         <div className="container">
