@@ -6,15 +6,18 @@ import { Accounts } from 'meteor/accounts-base';
 import { createContainer } from 'meteor/react-meteor-data';
 import { Locations } from '../../api/locations.js';
 
+import { getInputValue } from '../../modules/get-input-value';
+import { Row, Col, FormGroup, ControlLabel, FormControl, Button } from 'react-bootstrap';
+
 class Register extends Component {
   handleSubmit(event) {
     event.preventDefault();
 
-    var email = this.refs.email.value.trim();
-    var password = this.refs.password.value.trim();
-    var firstname = this.refs.firstname.value.trim();
-    var lastname = this.refs.lastname.value.trim();
-    var location = this.refs.location.value.trim();
+    var email = getInputValue(this.refs.email).trim();
+    var password = getInputValue(this.refs.password).trim();
+    var firstname = getInputValue(this.refs.firstname).trim();
+    var lastname = getInputValue(this.refs.lastname).trim();
+    var location = getInputValue(this.refs.location).trim();
 
     var user = {
       email: email,
@@ -41,19 +44,58 @@ class Register extends Component {
     return (
       <div>
         <form onSubmit={this.handleSubmit.bind(this)}>
-          <input type="text" ref="firstname" placeholder="First name..." required="required"/><br/>
-          <input type="text" ref="lastname" placeholder="Last name..." required="required"/><br/>    
-          <input type="text" ref="email" placeholder="Email..." required="required"/><br/> 
-          <input type="password" ref="password" placeholder="Password..." required="required"/><br/><br/>
 
-          <label htmlFor="location">Select your location.<br/><em>You can change it later...</em></label><br/>
-          <select name="location" ref="location">
-            { this.props.locations.map(function(location) {
-              return <option key={location._id} value={location.name}>{location.name}</option>;
-            })}
-          </select><br/><br/>
+           <FormGroup>
+            <FormControl
+              type="text"
+              ref="firstname"
+              name="firstname"
+              placeholder="First name"
+              required="true"
+            />
+          </FormGroup>
+
+           <FormGroup>
+            <FormControl
+              type="text"
+              ref="lastname"
+              name="lastname"
+              placeholder="Last name"
+              required="true"
+            />
+          </FormGroup>
+
           
-          <input type="submit" value="Register"/>
+           <FormGroup>
+            <FormControl
+              type="email"
+              ref="email"
+              name="email"
+              placeholder="Email"
+              required="true"
+            />
+          </FormGroup>
+
+           <FormGroup>
+            <FormControl
+              type="password"
+              ref="password"
+              name="password"
+              placeholder="Password"
+              required="true"
+            />
+          </FormGroup>
+
+          <FormGroup controlId="formControlsSelect">
+            <ControlLabel>Select your location. You can change it later... </ControlLabel>
+            <FormControl componentClass="select" ref="location" placeholder="select" required="true">
+              { this.props.locations.map(function(location) {
+                return <option key={location._id} value={location.name}>{location.name}</option>;
+              })}
+            </FormControl>
+          </FormGroup>
+                    
+          <Button type="submit" bsStyle="success">Register</Button>
         </form>
       </div>
     );

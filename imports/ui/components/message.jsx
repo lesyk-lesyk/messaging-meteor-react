@@ -22,7 +22,7 @@ export default class Message extends Component {
 
         { 
           this.props.message.owner == this.props.currentUserId && !this.props.message.deleted ? (
-            <button className="delete" onClick={this.deleteThisMessage.bind(this)}>&times;</button> 
+            <button className="btn-delete" onClick={this.deleteThisMessage.bind(this)}>&times;</button> 
             ) : '' 
         }
 
